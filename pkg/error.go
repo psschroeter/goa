@@ -24,6 +24,8 @@ type (
 		Temporary bool
 		// Is the error a server-side fault?
 		Fault bool
+		// Cause to support github.com/pkg/errors.Causer interface
+		cause error
 	}
 )
 
@@ -184,6 +186,9 @@ func (s *ServiceError) Error() string { return s.Message }
 // ErrorName returns the error name.
 func (s *ServiceError) ErrorName() string { return s.Name }
 
+// Cause returns the error cause.
+func (s *ServiceError) Cause() error { return s.cause }
+
 func newError(name string, timeout, temporary, fault bool, format string, v ...interface{}) *ServiceError {
 	return &ServiceError{
 		Name:      name,
@@ -203,6 +208,7 @@ func asError(err error) *ServiceError {
 			ID:      NewErrorID(),
 			Message: err.Error(),
 			Fault:   true, // Default to fault for unexpected errors
+			cause:   err,
 		}
 	}
 	return e

@@ -319,6 +319,7 @@ func {{ .Name }}(err error) {{ .TypeRef }} {
 	{{- if .Fault }}
 		Fault: true,
 	{{- end }}
+		cause: err,
 	}
 }
 `

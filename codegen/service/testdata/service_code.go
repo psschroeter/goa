@@ -304,6 +304,7 @@ func MakeError(err error) *goa.ServiceError {
 		Name:    "error",
 		ID:      goa.NewErrorID(),
 		Message: err.Error(),
+		cause:   err,
 	}
 }
 `
